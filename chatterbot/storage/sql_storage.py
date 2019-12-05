@@ -47,7 +47,18 @@ class SQLStorageAdapter(StorageAdapter):
             self.create_database()
 
         self.Session = sessionmaker(bind=self.engine, expire_on_commit=True)
-
+    
+    ''' Finishe the session'''
+    def kill_session(self):
+        session = self.Session()
+        try:
+            session.commit()
+        except:
+            # Log the statement text and the exception
+            print('Session does not save!')
+        finally:
+            session.close()
+    
     def get_statement_model(self):
         """
         Return the statement model.
